@@ -12,7 +12,7 @@ const hpp = require('hpp')
 const morgan = require('morgan')
 const config = require('./config')
 const graphqlRouter = require('./graphql/router')
-// const knexInitialize = require('./lib/knex/initialize')
+const knexInitialize = require('./lib/knex/initialize')
 const { initializeAppCleanup, shutdown } = require('./cleanup')
 const { initializeSentry } = require('./lib/sentry')
 const { logger, loggerNoSentry, stream: loggerStream } = require('./lib/logger')
@@ -48,7 +48,7 @@ async function startApp() {
   await initializeSentry()
 
   // db migrations
-  // await knexInitialize.runMigrations()
+  await knexInitialize.runMigrations()
 
   // cors
   app.use(cors(corsConfig))
@@ -123,7 +123,7 @@ async function startApp() {
     })
   })
 
-  app.listen(config.port, () => {
+  server.listen(config.port, () => {
     httpServerListening = true
     logger.info(`Server listening, port=${config.port}`)
   })
