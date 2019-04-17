@@ -3,49 +3,43 @@ const { createTableIfNotExists } = require('../helpers')
 exports.up = async knex =>
   createTableIfNotExists(knex, 'user', table => {
     table
-      .integer('id')
-      .index()
-      .unique()
+      .increments('id')
       .notNullable()
+      .unsigned()
 
     table
       .uuid('uuid')
       .index()
+      .unique()
       .notNullable()
 
     table.string('first_name').notNullable()
 
-    table.string('last_name')
+    table.string('last_name').notNullable()
 
-    table.string('title', 500)
+    table
+      .string('title', 500)
+      .notNullable()
+      .defaultTo('')
 
     table
       .string('email')
       .index()
       .notNullable()
-
-    table.string('phone')
-
-    table.string('address_line_1', 500).notNullable()
-
-    table.string('address_line_2', 500)
-
-    table.string('city').notNullable()
-
-    table.string('state').notNullable()
-
-    table.string('zipcode').notNullable()
-
-    table.text('image_url')
-
-    table.text('password_hash').notNullable()
+      .unique()
 
     table
       .boolean('email_is_confirmed')
       .notNullable()
       .defaultTo(false)
 
-    table.timestamp('date_of_birth')
+    table.string('phone').nullable()
+
+    table.string('zipcode').notNullable()
+
+    table.text('image_url').nullable()
+
+    table.text('password_hash').notNullable()
 
     table
       .timestamp('created_at')
