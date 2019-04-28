@@ -23,4 +23,15 @@ module.exports = {
     },
     useNullAsDefault: true,
   },
+  test: {
+    client: 'pg',
+    connection: config.testDb,
+    migrations: {
+      directory: './src/db/migrations',
+    },
+    seeds: {
+      directory: './src/db/seeds',
+    },
+    useNullAsDefault: true,
+  },
 }

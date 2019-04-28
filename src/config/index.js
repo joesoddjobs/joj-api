@@ -22,6 +22,7 @@ module.exports = {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
   },
+  testDb: process.env.TESTDATABASE_URL,
 
   logLevel: process.env.LOG_LEVEL || 'info',
 
