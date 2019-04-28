@@ -41,3 +41,25 @@ npm run start
 - The app runs new migrations on every startup so you do not need to worry about running them manually.
 - If necessary, to run migrations at any time, run `npm run db-migrations`.
 - To rollback migrations at any time, run `npm run db-rollback`.
+
+## Testing
+
+This project features extensive backend testing with Jest.js. To set this up, you will need to create a new database special for testing:
+
+```bash
+npm run copy-env
+npm run setup-test-db
+npm run db
+```
+
+Once in postgres, run:
+
+```bash
+\i test/scripttest.sql
+```
+
+To test the app, run
+
+```
+npm run test
+```

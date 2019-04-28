@@ -13,6 +13,7 @@
     "express": "^4.16.4",
     "graphql": "^14.2.1",
     "graphql-tag": "^2.10.1",
+    "graphql-tools": "^4.0.4",
     "helmet": "^3.16.0",
     "hpp": "^0.2.2",
     "html-minifier": "^4.0.0",
@@ -29,12 +30,16 @@
     "winston": "^3.2.1"
   },
   "scripts": {
-    "js-lint": "eslint \"src/**/*.js\"",
+    "js-lint": "eslint \"src/**/*.js\" \"test/**/*.js\"",
     "lint": "npm run js-lint",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "db-migrations": "./node_modules/.bin/knex -- migrate:latest",
-    "db-rollback": "./node_modules/.bin/knex -- migrate:rollback"
+    "db-rollback": "./node_modules/.bin/knex -- migrate:rollback",
+    "setup-test-db": "createdb boosttest",
+    "db": "psql -U admin postgres",
+    "test": "jest --verbose --coverage",
+    "copy-env": "cp sample.env .env"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
@@ -45,6 +50,7 @@
     "eslint-plugin-import": "^2.17.1",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-prettier": "^3.0.1",
+    "jest": "^24.7.1",
     "nodemon": "^1.18.11",
     "prettier": "^1.17.0"
   }
