@@ -54,6 +54,7 @@ typings/
 
 # dotenv environment variables file
 .env
+sample.env
 
 # for intellij projects
 .idea

@@ -47,7 +47,6 @@ npm run start
 This project features extensive backend testing with Jest.js. To set this up, you will need to create a new database special for testing:
 
 ```bash
-npm run copy-env
 npm run setup-test-db
 npm run db
 ```
