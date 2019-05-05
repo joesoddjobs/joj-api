@@ -7,7 +7,7 @@ const createTestConn = async () => {
   Model.knex(knex)
   await knex.migrate.rollback()
   await knex.migrate.latest()
-  // await knex.seed.run()
+  //await knex.seed.run()
   return knex
 }
 

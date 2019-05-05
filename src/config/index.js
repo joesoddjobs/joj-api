@@ -1,7 +1,7 @@
 module.exports = {
-  appName: 'Boost API',
+  appName: 'Backend Starter',
 
-  serviceName: 'Boost',
+  serviceName: 'Backend Starter',
 
   appDomain: process.env.APP_DOMAIN || 'http://localhost',
 

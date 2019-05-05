@@ -1,3 +1,3 @@
-DROP DATABASE IF EXISTS aalumtest;
-CREATE DATABASE aalumtest;
-\connect aalumtest;
+DROP DATABASE IF EXISTS startertest;
+CREATE DATABASE startertest;
+\connect startertest;

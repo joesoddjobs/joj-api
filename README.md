@@ -1,4 +1,4 @@
-# BOOST API
+# Starter Backend
 
 ## Set up in development
 
@@ -7,7 +7,7 @@
   - Sign up for a free personal heroku account (Do not use HSA Dev account).
   - Once you have signed in, click the `New` button on the top right.
   - Select `Create new app`.
-  - Add app-name e.g. `hsa-boost-api` and click create.
+  - Add app-name e.g. `[APP_NAME]` and click create.
   - Click the `Overview` tab.
   - Click `Configure Add-ons`.
   - On the addons search bar, search for `Heroku Postgres`.

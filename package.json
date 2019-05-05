@@ -1,5 +1,5 @@
 {
-  "name": "boost-api",
+  "name": "backend-starter",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -36,7 +36,7 @@
     "dev": "nodemon src/index.js",
     "db-migrations": "./node_modules/.bin/knex -- migrate:latest",
     "db-rollback": "./node_modules/.bin/knex -- migrate:rollback",
-    "setup-test-db": "createdb boosttest",
+    "setup-test-db": "createdb startertest",
     "db": "psql -U admin postgres",
     "test": "jest --verbose --coverage",
     "copy-env": "cp sample.env .env"
