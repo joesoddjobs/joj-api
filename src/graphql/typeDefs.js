@@ -1,7 +1,82 @@
 const gql = require('graphql-tag')
 
 module.exports = gql`
+  type Query {
+    isValidEmail(email: String!): Boolean!
+    currentContractor: ContractorReturn!
+    currentCustomer: CustomerReturn!
+  }
+
+  type ContractorReturn {
+    contractor: Contractor!
+    error: Error
+  }
+
+  type CustomerReturn {
+    contractor: Customer!
+    error: Error
+  }
+
+  type Mutation {
+    registerCustomer(input: CustomerRegisterInput!): CustomerRegisterReturn!
+    registerContractor(
+      input: ContractorRegisterInput!
+    ): ContractorRegisterReturn!
+    loginCustomer(email: String!, password: String!): CustomerLoginReturn!
+    loginContractor(email: String!, password: String!): ContractorLoginReturn!
+  }
+
+  type CustomerLoginReturn {
+    customer: Customer!
+    token: String!
+    error: Error
+  }
+
+  type ContractorLoginReturn {
+    contractor: Contractor!
+    token: String!
+    error: Error
+  }
+
+  input CustomerRegisterInput {
+    email: String!
+    password: String!
+    firstName: String!
+    lastName: String!
+    phoneNumber: String!
+    address: AddressInput!
+  }
+
+  type CustomerRegisterReturn {
+    customer: Customer!
+    error: Error
+    token: String!
+  }
+
+  input ContractorRegisterInput {
+    email: String!
+    password: String!
+    firstName: String!
+    lastName: String!
+    phoneNumber: String!
+    address: AddressInput!
+    birthDate: String!
+  }
+
+  type ContractorRegisterReturn {
+    contractor: Contractor!
+    error: Error
+    token: String!
+  }
+
   type Address {
+    street: String!
+    city: String!
+    state: String!
+    postalCode: String!
+  }
+
+  input AddressInput {
     street: String!
     city: String!
     state: String!
@@ -20,13 +95,13 @@ module.exports = gql`
     birthDate: String!
   }
 
-  type ContractorJob @model(queries: null) {
+  type ContractorJob {
     id: ID!
     contractor: Contractor!
     job: Job!
   }
 
-  type Customer @model {
+  type Customer {
     id: ID!
     firstName: String!
     lastName: String!
@@ -40,7 +115,7 @@ module.exports = gql`
     total: Float!
   }
 
-  type Job @model {
+  type Job {
     id: ID!
     customer: Customer
     status: Status!
@@ -55,6 +130,10 @@ module.exports = gql`
     secondChoiceDateTime: String!
     scheduledDateTime: String!
     rate: Float!
+  }
+
+  type Error {
+    message: String
   }
 
   enum JobType {

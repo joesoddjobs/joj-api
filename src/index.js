@@ -160,6 +160,7 @@ if (require.main === module) {
     .then(startApp)
     .then(() => logger.info('app started successfully!'))
     .catch(error => {
+      console.log(error)
       error.message2 = 'fatal runtime error'
       loggerNoSentry.error(error)
       return shutdown(1)
