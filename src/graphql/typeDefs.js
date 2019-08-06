@@ -13,7 +13,7 @@ module.exports = gql`
   }
 
   type CustomerReturn {
-    contractor: Customer!
+    customer: Customer!
     error: Error
   }
 

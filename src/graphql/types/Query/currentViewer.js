@@ -1,18 +1,12 @@
-const customerResolver = async (_obj, _args, { customer }) => {
-  if (!customer) {
-    return {
-      error: {
-        message: 'Could not find this customer',
-      },
-    }
-  }
-  return {
-    customer,
-  }
-}
+const { decodeToken } = require('../../../lib/tokens')
+const Contractor = require('../../../models/Contractor')
+const Customer = require('../../../models/Customer')
 
-const contractorResolver = async (_obj, _args, { contractor }) => {
-  if (!contractor) {
+// get current customer by decoding token in context:
+const customerResolver = async (_obj, _args, { token }) => {
+  const { id } = await decodeToken(token)
+  const currentCustomer = await Customer.query().findById(id)
+  if (!currentCustomer) {
     return {
       error: {
         message: 'Could not find this contractor',
@@ -20,7 +14,23 @@ const contractorResolver = async (_obj, _args, { contractor }) => {
     }
   }
   return {
-    contractor,
+    customer: currentCustomer,
+  }
+}
+
+// get current contractor by decoding token in context:
+const contractorResolver = async (_obj, _args, { token }) => {
+  const { id } = await decodeToken(token)
+  const currentContractor = await Contractor.query().findById(id)
+  if (!currentContractor) {
+    return {
+      error: {
+        message: 'Could not find this contractor',
+      },
+    }
+  }
+  return {
+    contractor: currentContractor,
   }
 }
 
