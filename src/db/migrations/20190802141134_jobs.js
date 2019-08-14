@@ -12,7 +12,9 @@ exports.up = function(knex, Promise) {
       .uuid('customerId')
       .notNull()
       .references('customers.id')
-    table.enum('status', ['CLAIMED', 'OPEN', 'COMPLETED', 'PAID'])
+    table
+      .enum('status', ['CLAIMED', 'OPEN', 'COMPLETED', 'PAID'])
+      .defaultTo('OPEN')
     table.enum('jobType', [
       'LANDSCAPING',
       'LAWN_MOWING',

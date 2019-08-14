@@ -2,9 +2,17 @@ const gql = require('graphql-tag')
 
 module.exports = gql`
   type Query {
-    isValidEmail(email: String!): Boolean!
-    currentContractor: ContractorReturn!
+    # customer queries:
+    isValidCustomerEmail(email: String!): Boolean!
     currentCustomer: CustomerReturn!
+
+    # contractor queries:
+    isValidContractorEmail(email: String!): Boolean!
+    currentContractor: ContractorReturn!
+
+    # job queries:
+    getAllJobs: [Job]!
+    getAllOpenJobs: [Job]!
   }
 
   type ContractorReturn {
@@ -18,12 +26,31 @@ module.exports = gql`
   }
 
   type Mutation {
+    # customer mutations:
+    loginCustomer(email: String!, password: String!): CustomerLoginReturn!
     registerCustomer(input: CustomerRegisterInput!): CustomerRegisterReturn!
+    createNewJob(input: NewJobInput!): NewJobReturn!
+
+    # contractor mutations:
     registerContractor(
       input: ContractorRegisterInput!
     ): ContractorRegisterReturn!
-    loginCustomer(email: String!, password: String!): CustomerLoginReturn!
     loginContractor(email: String!, password: String!): ContractorLoginReturn!
+  }
+
+  input NewJobInput {
+    jobType: JobType!
+    numberOfContractors: Int!
+    estimatedTime: Int!
+    jobDescription: String!
+    firstChoiceDateTime: String!
+    secondChoiceDateTime: String!
+    address: AddressInput
+  }
+
+  type NewJobReturn {
+    job: Job!
+    error: Error
   }
 
   type CustomerLoginReturn {
@@ -44,7 +71,7 @@ module.exports = gql`
     firstName: String!
     lastName: String!
     phoneNumber: String!
-    address: AddressInput!
+    address: AddressInput
   }
 
   type CustomerRegisterReturn {
@@ -88,17 +115,11 @@ module.exports = gql`
     firstName: String!
     lastName: String!
     email: String!
-    jobs: [ContractorJob]
+    jobs: [Job]
     phoneNumber: String!
-    address: Address!
+    address: Address
     income: Income
-    birthDate: String!
-  }
-
-  type ContractorJob {
-    id: ID!
-    contractor: Contractor!
-    job: Job!
+    age: String!
   }
 
   type Customer {
@@ -106,8 +127,12 @@ module.exports = gql`
     firstName: String!
     lastName: String!
     email: String!
-    jobs: [Job]
+    address: Address!
     phoneNumber: String!
+    jobs: [Job]
+    recentJobs: [Job]
+    activeJobs: [Job]
+    completedJobs: [Job]
   }
 
   type Income {
@@ -119,7 +144,7 @@ module.exports = gql`
     id: ID!
     customer: Customer
     status: Status!
-    contractors: [ContractorJob]
+    contractors: [Contractor]
     address: Address!
     jobType: JobType!
     numberOfContractors: Int!
@@ -130,6 +155,7 @@ module.exports = gql`
     secondChoiceDateTime: String!
     scheduledDateTime: String!
     rate: Float!
+    filled: Boolean!
   }
 
   type Error {

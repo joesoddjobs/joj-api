@@ -1,15 +1,16 @@
-const { HasManyRelation, HasOneRelation } = require('objection')
+const { ManyToManyRelation, HasOneRelation } = require('objection')
 const BaseModel = require('./BaseModel')
-const Customer = require('./Customer')
-const Address = require('./Address')
-const Contractor = require('./Contractor')
 
 class Job extends BaseModel {
   static get tableName() {
-    return 'contractors'
+    return 'jobs'
   }
 
   static get relationMappings() {
+    const Customer = require('./Customer')
+    const Address = require('./Address')
+    const Contractor = require('./Contractor')
+
     return {
       customer: {
         relation: HasOneRelation,
@@ -28,7 +29,7 @@ class Job extends BaseModel {
         },
       },
       contractors: {
-        relation: HasManyRelation,
+        relation: ManyToManyRelation,
         modelClass: Contractor,
         join: {
           from: 'jobs.id',
