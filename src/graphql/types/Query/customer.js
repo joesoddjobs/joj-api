@@ -42,9 +42,15 @@ const recentJobsResolver = async ({ id }) => {
   return recentJobs
 }
 
+const getAllCustomersResolver = async () => {
+  const users = await Customer.query()
+  return users
+}
+
 const resolver = {
   Query: {
     isValidCustomerEmail,
+    getAllCustomers: getAllCustomersResolver,
   },
   Customer: {
     activeJobs: activeJobsResolver,

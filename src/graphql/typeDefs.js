@@ -5,10 +5,12 @@ module.exports = gql`
     # customer queries:
     isValidCustomerEmail(email: String!): Boolean!
     currentCustomer: CustomerReturn!
+    getAllCustomers: [Customer]
 
     # contractor queries:
     isValidContractorEmail(email: String!): Boolean!
     currentContractor: ContractorReturn!
+    getAllContractors: [Contractor]
 
     # job queries:
     getAllJobs: [Job]!
@@ -36,6 +38,26 @@ module.exports = gql`
       input: ContractorRegisterInput!
     ): ContractorRegisterReturn!
     loginContractor(email: String!, password: String!): ContractorLoginReturn!
+
+    # admin mutations:
+    loginAdmin(email: String!, password: String!): AdminLoginReturn!
+    registerAdmin(email: String!, password: String!): AdminRegisterReturn!
+  }
+
+  type AdminLoginReturn {
+    admin: Admin!
+    token: String!
+    error: Error
+  }
+
+  type AdminRegisterReturn {
+    admin: Admin!
+    token: String!
+    error: Error
+  }
+
+  type Admin {
+    email: String!
   }
 
   input NewJobInput {
@@ -142,7 +164,7 @@ module.exports = gql`
 
   type Job {
     id: ID!
-    customer: Customer
+    customerId: String!
     status: Status!
     contractors: [Contractor]
     address: Address!
@@ -153,7 +175,7 @@ module.exports = gql`
     jobDescription: String!
     firstChoiceDateTime: String!
     secondChoiceDateTime: String!
-    scheduledDateTime: String!
+    scheduledDateTime: String
     rate: Float!
     filled: Boolean!
   }
@@ -164,7 +186,7 @@ module.exports = gql`
 
   enum JobType {
     LANDSCAPING
-    LAWN_MOWING
+    LAWNMOWING
     MOVING
     FURNITURE_ASSEMBLY
     POWER_WASHING
