@@ -47,9 +47,15 @@ const ageResolver = async ({ id }) => {
   return age
 }
 
+const getAllContractorsResolver = async () => {
+  const users = await Contractor.query()
+  return users
+}
+
 const resolver = {
   Query: {
     isValidContractorEmail: isValidContractorEmailResolver,
+    getAllContractors: getAllContractorsResolver,
   },
   Contractor: {
     jobs: jobsResolver,

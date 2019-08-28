@@ -3,6 +3,7 @@ const randomize = require('randomatic')
 const Customer = require('../../../models/Customer')
 const Contractor = require('../../../models/Contractor')
 const config = require('../../../config')
+const Admin = require('../../../models/Admin')
 const comparePasswords = require('../../../lib/passwords/comparePasswords')
 const { createToken } = require('../../../lib/tokens')
 const { verifyUser } = require('../../helpers/auth')
@@ -69,8 +70,38 @@ const loginContractor = async (obj, { email, password }) => {
   }
 }
 
+const loginAdmin = async (obj, { email, password }) => {
+  const user = await Admin.query().findOne('email', email)
+  if (!user) {
+    return {
+      error: {
+        message:
+          "The email you entered doesn't belong to an existing administrator account",
+      },
+    }
+  }
+
+  const verificationError = verifyUser(user)
+  if (verificationError) return verificationError
+
+  const valid = await comparePasswords(password, user.password)
+
+  if (!valid) {
+    return {
+      error: { message: 'Invalid password' },
+    }
+  }
+
+  const token = createToken(user.id, email)
+
+  return {
+    admin: user,
+    token,
+  }
+}
+
 const resolver = {
-  Mutation: { loginCustomer, loginContractor },
+  Mutation: { loginCustomer, loginContractor, loginAdmin },
 }
 
 module.exports = resolver

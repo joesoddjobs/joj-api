@@ -5,7 +5,9 @@ const Customer = require('../../../models/Customer')
 // get current customer by decoding token in context:
 const customerResolver = async (_obj, _args, { token }) => {
   const { id } = await decodeToken(token)
+  console.log('CURRENT ID', id)
   const currentCustomer = await Customer.query().findById(id)
+  console.log('current cust', currentCustomer)
   if (!currentCustomer) {
     return {
       error: {

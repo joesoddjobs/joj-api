@@ -17,6 +17,7 @@ const createNewJob = async (obj, { input }, { token }) => {
   // set customerId:
   const { id } = await decodeToken(token)
   newJobInput.customerId = id
+  console.log('CUSTOMERID', id)
 
   // if no new address was provided, use default user address:
   if (!input.address) {
