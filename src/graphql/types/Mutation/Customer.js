@@ -1,7 +1,49 @@
 const _ = require('lodash')
+const { transaction } = require('objection')
+const { createToken, decodeToken } = require('../../../lib/tokens')
 const Customer = require('../../../models/Customer')
 const hashPassword = require('../../../lib/passwords/hashPassword')
-const { createToken } = require('../../../lib/tokens')
+
+const editCustomer = async (obj, { input }, { token }) => {
+  const editInput = _.pick(input, [
+    'firstName',
+    'lastName',
+    'phoneNumber',
+    'email',
+  ])
+
+  const { id } = await decodeToken(token)
+
+  if (!id) {
+    return {
+      error: {
+        message: 'User not found.',
+      },
+    }
+  }
+
+  const knex = Customer.knex()
+
+  try {
+    const insertTransaction = await transaction(knex, async trx => {
+      const updatedUser = await Customer.query(trx).patchAndFetchById(
+        id,
+        editInput,
+      )
+
+      return {
+        customer: updatedUser,
+      }
+    })
+    return insertTransaction
+  } catch (err) {
+    return {
+      error: {
+        message: 'Something went wrong. Customer not updated.',
+      },
+    }
+  }
+}
 
 const registerCustomer = async (obj, { input }) => {
   const registerInput = _.pick(input, [
@@ -48,6 +90,7 @@ const registerCustomer = async (obj, { input }) => {
 const resolver = {
   Mutation: {
     registerCustomer,
+    editCustomer,
   },
 }
 
