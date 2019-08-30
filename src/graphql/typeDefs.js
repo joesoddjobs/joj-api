@@ -32,6 +32,8 @@ module.exports = gql`
     loginCustomer(email: String!, password: String!): CustomerLoginReturn!
     registerCustomer(input: CustomerRegisterInput!): CustomerRegisterReturn!
     createNewJob(input: NewJobInput!): NewJobReturn!
+    editCustomer(input: EditCustomerInput!): EditCustomerReturn!
+    deleteJob(jobId: ID!): DeleteReturn!
 
     # contractor mutations:
     registerContractor(
@@ -42,6 +44,41 @@ module.exports = gql`
     # admin mutations:
     loginAdmin(email: String!, password: String!): AdminLoginReturn!
     registerAdmin(email: String!, password: String!): AdminRegisterReturn!
+
+    markJobCompleted(jobId: ID!): markJobReturn!
+    markJobPaid(jobId: ID!): markJobReturn!
+    deleteContractor(contractorId: ID!): Boolean!
+    assignContractorToJob(
+      contractorId: ID!
+      jobId: ID!
+    ): AssignContractorReturn!
+  }
+
+  type DeleteReturn {
+    success: Boolean
+    error: Error
+  }
+
+  type AssignContractorReturn {
+    job: Job!
+    error: Error
+  }
+
+  type markJobReturn {
+    job: Job!
+    error: Error
+  }
+
+  input EditCustomerInput {
+    firstName: String
+    lastName: String
+    phoneNumber: String
+    email: String
+  }
+
+  type EditCustomerReturn {
+    customer: Customer!
+    error: Error
   }
 
   type AdminLoginReturn {
@@ -57,6 +94,7 @@ module.exports = gql`
   }
 
   type Admin {
+    id: ID!
     email: String!
   }
 
