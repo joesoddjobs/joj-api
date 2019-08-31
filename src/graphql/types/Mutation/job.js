@@ -2,7 +2,6 @@ const _ = require('lodash')
 const { decodeToken } = require('../../../lib/tokens')
 const Address = require('../../../models/Address')
 const Job = require('../../../models/Job')
-const Customer = require('../../../models/Customer')
 const Admin = require('../../../models/Admin')
 
 const createNewJob = async (obj, { input }, { token }) => {
@@ -54,7 +53,6 @@ const deleteJob = async (obj, { jobId }, { token }) => {
   const { id } = await decodeToken(token)
   const admin = await Admin.query().findById(id)
 
-  console.log('admin', admin)
   if (admin) {
     const deleteAction = await Job.query().deleteById(jobId)
 
@@ -71,7 +69,7 @@ const deleteJob = async (obj, { jobId }, { token }) => {
   const customerJob = await Job.query()
     .findById(jobId)
     .where('customerId', id)
-  console.log('JOB', customerJob)
+
   if (!customerJob) {
     return {
       error: {
@@ -91,10 +89,60 @@ const deleteJob = async (obj, { jobId }, { token }) => {
   return { success: true }
 }
 
+const markJobCompleted = async (obj, { jobId }, { token }) => {
+  const { id } = await decodeToken(token)
+  const admin = await Admin.query().findById(id)
+  if (!admin) {
+    return {
+      error: {
+        message: 'You are not authorised to complete this action.',
+      },
+    }
+  }
+  const completedJob = Job.query().patchAndFetchById(jobId, {
+    status: 'COMPLETED',
+  })
+
+  if (!completedJob) {
+    return {
+      error: {
+        message: 'Failed to update job, please try again.',
+      },
+    }
+  }
+  return { job: completedJob }
+}
+
+const markJobPaid = async (obj, { jobId }, { token }) => {
+  const { id } = await decodeToken(token)
+  const admin = await Admin.query().findById(id)
+  if (!admin) {
+    return {
+      error: {
+        message: 'You are not authorised to complete this action.',
+      },
+    }
+  }
+  const paidJob = Job.query().patchAndFetchById(jobId, {
+    status: 'PAID',
+  })
+
+  if (!paidJob) {
+    return {
+      error: {
+        message: 'Failed to update job, please try again.',
+      },
+    }
+  }
+  return { job: paidJob }
+}
+
 const resolver = {
   Mutation: {
     deleteJob,
     createNewJob,
+    markJobCompleted,
+    markJobPaid,
   },
 }
 
