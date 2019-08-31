@@ -1,5 +1,6 @@
 const Address = require('../../../models/Address')
 const Job = require('../../../models/Job')
+const Contractor = require('../../../models/Contractor')
 
 const getAllJobs = async () => {
   const jobs = await Job.query().eager('contractors')
@@ -17,6 +18,12 @@ const filledResolver = async ({ numberOfContractors, contractors }) => {
   return contractors.length >= numberOfContractors
 }
 
+const contractorsResolver = async ({ id }) => {
+  const job = await Job.query().findById(id)
+  const contractors = await job.$relatedQuery('contractors')
+  return contractors
+}
+
 const resolver = {
   Query: {
     getAllJobs,
@@ -24,6 +31,7 @@ const resolver = {
   Job: {
     address: addressResolver,
     filled: filledResolver,
+    contractors: contractorsResolver,
   },
 }
 

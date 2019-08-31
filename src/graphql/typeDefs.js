@@ -47,7 +47,7 @@ module.exports = gql`
 
     markJobCompleted(jobId: ID!): markJobReturn!
     markJobPaid(jobId: ID!): markJobReturn!
-    deleteContractor(contractorId: ID!): Boolean!
+    deleteContractor(contractorId: ID!): DeleteReturn!
     assignContractorToJob(
       contractorId: ID!
       jobId: ID!
