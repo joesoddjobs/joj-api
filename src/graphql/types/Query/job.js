@@ -1,6 +1,5 @@
 const Address = require('../../../models/Address')
 const Job = require('../../../models/Job')
-const Contractor = require('../../../models/Contractor')
 
 const getAllJobs = async () => {
   const jobs = await Job.query().eager('contractors')
@@ -24,6 +23,15 @@ const contractorsResolver = async ({ id }) => {
   return contractors
 }
 
+const customerResolver = async ({ id }) => {
+  const job = await Job.query().findById(id)
+  const customer = await job
+    .$relatedQuery('customer')
+    .where('id', job.customerId)
+  console.log('CUSTOMER', customer)
+  return customer
+}
+
 const resolver = {
   Query: {
     getAllJobs,
@@ -32,6 +40,7 @@ const resolver = {
     address: addressResolver,
     filled: filledResolver,
     contractors: contractorsResolver,
+    customer: customerResolver,
   },
 }
 
