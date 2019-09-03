@@ -203,6 +203,7 @@ module.exports = gql`
   type Job {
     id: ID!
     customerId: String!
+    customer: Customer!
     status: Status!
     contractors: [Contractor]
     address: Address!
