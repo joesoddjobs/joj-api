@@ -28,7 +28,6 @@ const customerResolver = async ({ id }) => {
   const customer = await job
     .$relatedQuery('customer')
     .where('id', job.customerId)
-  console.log('CUSTOMER', customer)
   return customer
 }
 

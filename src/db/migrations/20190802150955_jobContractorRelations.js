@@ -10,10 +10,14 @@ exports.up = function(knex, Promise) {
       .uuid('jobId')
       .notNull()
       .references('jobs.id')
+      .onUpdate('CASCADE')
+      .onDelete('CASCADE')
     table
       .uuid('contractorId')
       .notNull()
       .references('contractors.id')
+      .onUpdate('CASCADE')
+      .onDelete('CASCADE')
     table
       .timestamp('createdAt')
       .defaultTo(knex.fn.now())
