@@ -28,7 +28,7 @@ const incomeResolver = async ({ id }) => {
   const jobs = await Job.query()
     .eager('contractors')
     .modifyEager('contractors', builder => {
-      builder.where('contractorId', id)
+      builder.where('contractorId', id).andWhere('status', 'PAID')
     })
 
   const reducer = (acc, job) => acc + job.actualTime * job.rate

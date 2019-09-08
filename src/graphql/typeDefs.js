@@ -45,7 +45,7 @@ module.exports = gql`
     loginAdmin(email: String!, password: String!): AdminLoginReturn!
     registerAdmin(email: String!, password: String!): AdminRegisterReturn!
 
-    markJobCompleted(jobId: ID!): markJobReturn!
+    markJobCompleted(jobId: ID!, actualTime: Int!): markJobReturn!
     markJobPaid(jobId: ID!): markJobReturn!
     deleteContractor(contractorId: ID!): DeleteReturn!
     assignContractorToJob(
