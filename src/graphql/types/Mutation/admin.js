@@ -86,11 +86,39 @@ const assignContractorToJob = async (
   return { job: updatedJob }
 }
 
+const removeContractorFromJob = async (
+  obj,
+  { contractorId, jobId },
+  { token },
+) => {
+  const { id } = await decodeToken(token)
+  const admin = await Admin.query()
+    .skipUndefined()
+    .findById(id)
+
+  if (!admin) {
+    return {
+      error: {
+        message: 'You are not authorised to complete this action.',
+      },
+    }
+  }
+
+  await JobContractorRelations.query()
+    .delete()
+    .where('contractorId', contractorId)
+    .andWhere('jobId', jobId)
+
+  const updatedJob = await Job.query().findById(jobId)
+  return { job: updatedJob }
+}
+
 const resolver = {
   Mutation: {
     registerAdmin,
     deleteContractor,
     assignContractorToJob,
+    removeContractorFromJob,
   },
 }
 

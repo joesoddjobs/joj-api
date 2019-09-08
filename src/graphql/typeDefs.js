@@ -52,6 +52,10 @@ module.exports = gql`
       contractorId: ID!
       jobId: ID!
     ): AssignContractorReturn!
+    removeContractorFromJob(
+      contractorId: ID!
+      jobId: ID!
+    ): AssignContractorReturn!
   }
 
   type DeleteReturn {
