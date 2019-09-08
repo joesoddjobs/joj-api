@@ -89,7 +89,7 @@ const deleteJob = async (obj, { jobId }, { token }) => {
   return { success: true }
 }
 
-const markJobCompleted = async (obj, { jobId }, { token }) => {
+const markJobCompleted = async (obj, { jobId, actualTime }, { token }) => {
   const { id } = await decodeToken(token)
   const admin = await Admin.query().findById(id)
   if (!admin) {
@@ -101,6 +101,7 @@ const markJobCompleted = async (obj, { jobId }, { token }) => {
   }
   const completedJob = Job.query().patchAndFetchById(jobId, {
     status: 'COMPLETED',
+    actualTime,
   })
 
   if (!completedJob) {
