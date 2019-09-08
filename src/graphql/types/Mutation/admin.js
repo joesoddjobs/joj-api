@@ -3,6 +3,7 @@ const Job = require('../../../models/Job')
 const hashPassword = require('../../../lib/passwords/hashPassword')
 const { createToken } = require('../../../lib/tokens')
 const Contractor = require('../../../models/Contractor')
+const JobContractorRelations = require('../../../models/JobContractorRelations')
 const { decodeToken } = require('../../../lib/tokens')
 
 const registerAdmin = async (obj, { email, password }) => {
@@ -76,10 +77,39 @@ const assignContractorToJob = async (
     }
   }
 
-  const job = await Job.query().findById(jobId)
+  await JobContractorRelations.query().insert({
+    contractorId,
+    jobId,
+  })
 
-  const updatedJob = await job.$relatedQuery('contractors').relate(contractorId)
+  const updatedJob = await Job.query().findById(jobId)
+  return { job: updatedJob }
+}
 
+const removeContractorFromJob = async (
+  obj,
+  { contractorId, jobId },
+  { token },
+) => {
+  const { id } = await decodeToken(token)
+  const admin = await Admin.query()
+    .skipUndefined()
+    .findById(id)
+
+  if (!admin) {
+    return {
+      error: {
+        message: 'You are not authorised to complete this action.',
+      },
+    }
+  }
+
+  await JobContractorRelations.query()
+    .delete()
+    .where('contractorId', contractorId)
+    .andWhere('jobId', jobId)
+
+  const updatedJob = await Job.query().findById(jobId)
   return { job: updatedJob }
 }
 
@@ -88,6 +118,7 @@ const resolver = {
     registerAdmin,
     deleteContractor,
     assignContractorToJob,
+    removeContractorFromJob,
   },
 }
 
