@@ -3,6 +3,7 @@ const Job = require('../../../models/Job')
 const hashPassword = require('../../../lib/passwords/hashPassword')
 const { createToken } = require('../../../lib/tokens')
 const Contractor = require('../../../models/Contractor')
+const JobContractorRelations = require('../../../models/JobContractorRelations')
 const { decodeToken } = require('../../../lib/tokens')
 
 const registerAdmin = async (obj, { email, password }) => {
@@ -76,10 +77,12 @@ const assignContractorToJob = async (
     }
   }
 
-  const job = await Job.query().findById(jobId)
+  await JobContractorRelations.query().insert({
+    contractorId,
+    jobId,
+  })
 
-  const updatedJob = await job.$relatedQuery('contractors').relate(contractorId)
-
+  const updatedJob = await Job.query().findById(jobId)
   return { job: updatedJob }
 }
 
