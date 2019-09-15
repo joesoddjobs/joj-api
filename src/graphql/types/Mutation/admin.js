@@ -3,7 +3,6 @@ const Job = require('../../../models/Job')
 const hashPassword = require('../../../lib/passwords/hashPassword')
 const { createToken } = require('../../../lib/tokens')
 const Contractor = require('../../../models/Contractor')
-const JobContractorRelations = require('../../../models/JobContractorRelations')
 const { decodeToken } = require('../../../lib/tokens')
 
 const registerAdmin = async (obj, { email, password }) => {
@@ -77,11 +76,8 @@ const assignContractorToJob = async (
     }
   }
 
-  await JobContractorRelations.query().insert({
-    contractorId,
-    jobId,
-  })
-
+  const job = await Job.query().findById(jobId)
+  await job.$relatedQuery('contractors').relate(contractorId)
   const updatedJob = await Job.query().findById(jobId)
   return { job: updatedJob }
 }
@@ -104,10 +100,11 @@ const removeContractorFromJob = async (
     }
   }
 
-  await JobContractorRelations.query()
-    .delete()
+  const job = await Job.query().findById(jobId)
+  await job
+    .$relatedQuery('contractors')
+    .unrelate()
     .where('contractorId', contractorId)
-    .andWhere('jobId', jobId)
 
   const updatedJob = await Job.query().findById(jobId)
   return { job: updatedJob }
