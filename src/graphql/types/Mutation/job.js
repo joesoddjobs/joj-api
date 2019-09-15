@@ -138,12 +138,37 @@ const markJobPaid = async (obj, { jobId }, { token }) => {
   return { job: paidJob }
 }
 
+const scheduleJob = async (obj, { jobId, scheduledDateTime }, { token }) => {
+  const { id } = await decodeToken(token)
+  const admin = await Admin.query().findById(id)
+  if (!admin) {
+    return {
+      error: {
+        message: 'You are not authorised to complete this action.',
+      },
+    }
+  }
+
+  const scheduledJob = Job.query().patchAndFetchById(jobId, {
+    scheduledDateTime,
+  })
+
+  if (!scheduledJob) {
+    return {
+      error: {
+        message: 'Failed to update job, please try again.',
+      },
+    }
+  }
+}
+
 const resolver = {
   Mutation: {
     deleteJob,
     createNewJob,
     markJobCompleted,
     markJobPaid,
+    scheduleJob,
   },
 }
 

@@ -56,10 +56,16 @@ module.exports = gql`
       contractorId: ID!
       jobId: ID!
     ): AssignContractorReturn!
+    scheduleJob(scheduledDateTime: String, jobId: ID): ScheduleJobReturn!
   }
 
   type DeleteReturn {
     success: Boolean
+    error: Error
+  }
+
+  type ScheduleJobReturn {
+    job: Job!
     error: Error
   }
 
