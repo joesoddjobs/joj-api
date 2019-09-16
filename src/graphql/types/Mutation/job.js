@@ -149,7 +149,7 @@ const scheduleJob = async (obj, { jobId, scheduledDateTime }, { token }) => {
     }
   }
 
-  const scheduledJob = Job.query().patchAndFetchById(jobId, {
+  const scheduledJob = await Job.query().patchAndFetchById(jobId, {
     scheduledDateTime,
   })
 
@@ -160,6 +160,10 @@ const scheduleJob = async (obj, { jobId, scheduledDateTime }, { token }) => {
       },
     }
   }
+
+  console.log('SCHEDULED JOB', scheduledJob)
+
+  return { job: scheduledJob }
 }
 
 const resolver = {
